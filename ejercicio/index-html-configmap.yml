@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-html-configmap
+data:
+  index.html: |
+    <html>
+    <h1>Hola Mundo</h1>
+    <body>
+    Esto es un ejercicio practico del workshop de ING...
+    </body>
+    </html>

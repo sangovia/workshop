@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ejercicio
+  labels:
+    app: ejercicio-practico
+    type: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ejercicio-practico
+  template:
+    metadata:
+      labels:
+        app: ejercicio-practico
+    spec:
+      containers:
+        - name: nginx-container
+          image: public.ecr.aws/nginx/nginx:alpine-slim
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-index-file
+              mountPath: /usr/share/nginx/html/
+      volumes:
+        - name: nginx-index-file
+          configMap:
+            name: index-html-configmap
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 2

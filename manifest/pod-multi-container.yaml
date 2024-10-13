@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-multi-app-pod
+  labels:
+    app: my-multi-app
+    type:  frontend
+spec:
+  containers:
+    - name: nginx-container
+      image: public.ecr.aws/nginx/nginx:alpine-slim
+    - name: ubuntu
+      image: ubuntu:latest
+      command: [ "/bin/bash", "-c", "--" ]
+      args: [ "while true; do sleep 30; done;" ]

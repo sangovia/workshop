@@ -18,6 +18,8 @@ spec:
       containers:
       - name: nginx-container
         image: public.ecr.aws/nginx/nginx:alpine-slim
+        ports:
+          - containerPort: 80
         env:
          - name: VERSION
            value: "DEPLOYMENT 1"

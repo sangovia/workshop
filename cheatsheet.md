@@ -27,11 +27,11 @@ Abrimos la consola de CRC, entrando en el sigiente enlace:
 
 <a href="https://console-openshift-console.apps-crc.testing" target="_blank">Link to web console</a>
 
-Nos logueamos con el usuario kubeadmin, y el password que encontraremos en los logs de arranque.
+Nos logueamos con el usuario ***kubeadmin***, y el ***password*** que encontraremos en los logs de arranque.
 
 
 
-A continuación lanzamos el siguiente comando:
+A continuación lanzamos el siguiente comando para evitar problemas de permisos con usuarios en contenedores:
 
 ```bash
 oc adm policy add-scc-to-user anyuid -z default 
@@ -44,7 +44,7 @@ oc adm policy add-scc-to-user anyuid -z default
 ### Paseo por consola 
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
 
 
@@ -61,7 +61,7 @@ oc run first-app-pod --image public.ecr.aws/nginx/nginx:alpine-slim
 </p>
 
 
-### Lo observamos y lo borramos el POD
+### Observamos el POD
 
 <p>
 
@@ -78,6 +78,12 @@ oc get pods first-app-pod -o wide
 ```bash
 oc describe pod first-app-pod
 ```
+</p>
+
+### Borramos el POD
+
+<p>
+
 ```bash
 oc delete pod first-app-pod
 ```
@@ -118,7 +124,7 @@ oc get pods
 <p>
 
 ```bash
-cat manifest/multi-pod.yaml
+cat manifest/pod-multi-container.yaml
 ```
 
 ```yaml
@@ -145,7 +151,7 @@ oc create -f manifest/pod-multi-container.yaml
 </p>
 
 
-### observamos los PODs
+### Observamos ambos PODs
 
 <p>
 
@@ -173,7 +179,7 @@ oc create deployment my-imperative-dep --image=public.ecr.aws/nginx/nginx:alpine
 </p>
 
 
-### Lo observamos y lo borramos el deployment
+### Observamos el deployment y lo borramos 
 
 <p>
 
@@ -222,6 +228,8 @@ spec:
       containers:
       - name: nginx-container
         image: public.ecr.aws/nginx/nginx:alpine-slim
+        ports:
+          - containerPort: 80
         env:
          - name: VERSION
            value: "DEPLOYMENT 1"
@@ -252,17 +260,22 @@ oc get replicaset
 ```bash
 oc get pods
 ```
+
+</p>
+
+### Observamos el rollout y actualizamos el deployment
+
+<p>
+
 ```bash
 oc rollout status deployment/my-app-deployment
 ```
 ```bash
 oc rollout history deployment/my-app-deployment
 ```
-
 ```bash
 cat manifest/deployment-update.yaml
 ```
-
 ```yaml
 kind: Deployment
 metadata:
@@ -283,6 +296,8 @@ spec:
       containers:
         - name: nginx-container
           image: public.ecr.aws/nginx/nginx:alpine-slim
+          ports:
+            - containerPort: 80
           env:
             - name: VERSION
               value: "DEPLOYMENT 2"
@@ -305,6 +320,12 @@ oc rollout history deployment/my-app-deployment
 ```bash
 oc get deployment my-app-deployment -o yaml
 ```
+</p>
+
+### Hacemos rollback de deployment
+
+<p>
+
 ```bash
 oc rollout undo deployment/my-app-deployment
 ```
@@ -322,7 +343,7 @@ oc get deployment my-app-deployment -o yaml
 
 
 ## Namespaces
-### Podemos crear un nuevo namespace de forma imperativa
+### Creamos un nuevo namespace de forma imperativa
 
 <p>
 
@@ -332,7 +353,7 @@ oc create namespace my-imp-namespace
 </p>
 
 
-### Podemos crear un nuevo namespace de forma declarativa
+### Creamos un nuevo namespace de forma declarativa
 
 <p>
 
@@ -353,7 +374,7 @@ oc apply -f manifest/namespace.yaml
 </p>
 
 
-### Lo observamos
+### Observamos los namespaces
 
 <p>
 
@@ -380,7 +401,7 @@ oc run namespaced-pod --image public.ecr.aws/nginx/nginx:alpine-slim -n my-names
 </p>
 
 
-### Observamos el nuevo pod
+### Observamos el nuevo pod  en el nuevo namespace
 
 <p>
 
@@ -396,9 +417,9 @@ oc get pods --namespace=my-namespace
 ### Los observamos en la consola de ICHP
 
 <p>
-
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ## ResourceQuota
@@ -406,9 +427,9 @@ oc get pods --namespace=my-namespace
 ### Observamos en la consola de ICHP los ResourceQuotas de recursos y objetos en projecto ICHP real
 
 <p>
-
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ## ConfigMaps
@@ -420,12 +441,26 @@ oc get pods --namespace=my-namespace
 oc create configmap my-imp-app-config1 --from-literal=APP_COLOR=blue --from-literal=APP_MODE=dev
 ```
 ```bash
+oc get configmaps
+```
+```bash
+oc get configmap my-imp-app-config1 -o yaml
+```
+
+```bash
 oc create configmap my-imp-app-config2 --from-file=properties/config.properties  
 ```
+```bash
+oc get configmaps
+```
+```bash
+oc get configmap my-imp-app-config2 -o yaml
+```
+
 </p>
 
 
-### Podemos crear un nuevo ConfigMap de forma declarativa
+### Creamos un nuevo ConfigMap de forma declarativa
 
 <p>
 
@@ -449,7 +484,7 @@ oc apply -f manifest/config-map.yaml
 </p>
 
 
-### Lo observamos
+### Observamos el ConfigMap
 
 <p>
 
@@ -474,13 +509,27 @@ oc describe configmap my-app-config
 oc create secret generic my-app-secret1 --from-literal=DB_USER=user --from-literal=DB_PASSWORD=mypassword
 ```
 ```bash
+oc get secrets
+```
+```bash
+oc get secrets my-app-secret1 -o yaml
+```
+
+```bash
 oc create secret generic my-app-secret2 --from-file=properties/secrets.properties 
 ```
+```bash
+oc get secrets
+```
+```bash
+oc get secrets my-app-secret2 -o yaml
+```
+
 
 </p>
 
 
-### Podemos crear un nuevo Secret de forma declarativa
+### Creamos un nuevo Secret de forma declarativa
 
 <p>
 
@@ -552,8 +601,7 @@ oc get secrets
 ### Observamos en la consola de ICHP los service account y secret prom-tenancy-access y prom-tenancy-access-token
 
 <p>
-
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
 
 
@@ -562,9 +610,9 @@ oc get secrets
 
 
 <p>
-
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 
@@ -573,7 +621,7 @@ oc get secrets
 ### Observamos en la consola de ICHP en la defición de POD de un Merak real
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
 
 
@@ -582,16 +630,18 @@ oc get secrets
 ### Observamos en la consola de ICHP en la defición de POD de un Merak real
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ## Events
 ### Podemos observar los eventos en la consola de ICHP de un Merak real
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ### Podemos ver los eventos de un determinado objeto con get events o describe
@@ -621,9 +671,9 @@ oc get event --field-selector type=Warning
 ### Podemos observar los logs en la consola de ICHP en la defición de POD de un Merak real
 
 <p>
-
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ### Podemos ver los logs de un determinado POD mono-container con get events o describe
@@ -667,6 +717,9 @@ oc expose deployment my-app-deployment --name=my-app-svc-clusterip --port=80 --t
 ```bash
 oc get services
 ```
+```bash
+oc get service my-app-svc-clusterip -o yaml
+```
 
 </p>
 
@@ -674,8 +727,9 @@ oc get services
 ### Observamos el clusterIP de nuestro Merak en la consola de Openshift
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ### Creamos un nuevo NodePort y exponemos nuestro desployment 
@@ -708,8 +762,15 @@ spec:
 oc apply -f manifest/node-port.yaml 
 ```
 ```bash
-oc expose deployment my-app-deployment --name=my-app-svc-node-port --port=80 --target-port=8080 --type=NodePort 
+oc expose deployment my-app-deployment --name=my-app-svc-node-port --port=80 --target-port=80 --type=NodePort 
 ```
+```bash
+oc get services
+```
+```bash
+oc get service my-app-svc-node-port -o yaml
+```
+
 </p>
 
 
@@ -723,6 +784,14 @@ oc expose deployment my-app-deployment --name=my-app-svc-loadbalancer --port=80 
 ```bash
 oc get services
 ```
+```bash
+oc get service my-app-deployment -o yaml
+```
+```bash
+oc get service my-app-svc-loadbalancer -o yaml
+```
+
+
 </p>
 
 
@@ -731,7 +800,7 @@ oc get services
 ### Observamos la network Policy allow-touchpoint-mesh-traffic en consola de Openshift
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
 
 
@@ -740,8 +809,9 @@ oc get services
 ### Observamos el rol prom-tenancy-access en consola de Openshift
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
+
 
 
 ## APIGroups
@@ -749,9 +819,8 @@ oc get services
 ### Observamos los api groups en la consola de Openshift
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
-
 
 
 ## Custom Resource Definitions
@@ -759,9 +828,8 @@ oc get services
 ### Observamos los api groups en la consola de Openshift
 
 <p>
-<a href="https://oauth-openshift.apps.cluster0017.non-prod.ichp.ing.net/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole-openshift-console.apps.cluster0017.non-prod.ichp.ing.net%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=d95b0528" target="_blank">Consola ICHP</a>
+Comprobamos la consola WEB de un proyecto
 </p>
-
 
 
 ## Projects
@@ -795,11 +863,13 @@ oc project default
 ```
 
 ```bash
-oc expose svc my-app-svc-clusterip
+oc expose svc my-app-svc-node-port
 ```
 ```bash
 oc get routes
 ```
+
+<a href="http://my-app-svc-node-port-default.apps-crc.testing/" target="_blank">Link to web console</a>
 
 </p>
 

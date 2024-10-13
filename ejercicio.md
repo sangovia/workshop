@@ -14,6 +14,8 @@ oc new-project ejercicio-practico
 ```bash
 oc project ejercicio-practico
 ```
+A continuación lanzamos el siguiente comando para evitar problemas de permisos con usuarios en contenedores:
+
 ```bash
 oc adm policy add-scc-to-user anyuid -z default 
 ```
@@ -79,7 +81,7 @@ oc describe deployment ejercicio
 </p>
 </details>
 
-### Creamos clusterIP para el deployment y lo exponemos en un route
+### Creamos clusterIP para el deployment y lo exponemos en un route 
 <details><summary>show</summary>
 <p>
 
@@ -92,6 +94,9 @@ oc get services -o wide
 ```bash
 oc expose svc ejercicio
 ```
+
+### Observamos el servicio
+
 ```bash
 oc get routes
 ```
@@ -104,7 +109,7 @@ Buscamos y accedemos:
 Accedemos a la <a href="http://ejercicio-ejercicio-practico.apps-crc.testing/" target="_blank">URL</a>
 y refrescamos el navegador
 
-### Creamon un nuevo configmap en el namespace "ejercicio"
+### Creamon un nuevo configmap en el namespace "ejercicio-practico"
 <details><summary>show</summary>
 <p>
 
@@ -135,7 +140,7 @@ oc apply -f ejercicio/index-html-configmap.yml
 </details>
 
 
-### Actualizamos el deployment en el namespace "ejercicio"
+### Actualizamos el deployment en el namespace "ejercicio-practico" para montarle el configMap
 <details><summary>show</summary>
 <p>
 
@@ -192,15 +197,14 @@ spec:
 ```bash
 oc apply -f ejercicio/ejercicio-deployment-update.yaml
 ```
-Accedemos a la <a href="http://ejercicio-ejercicio-practico.apps-crc.testing/" target="_blank">URL</a>
-y refrescamos el navegador
-
-
 </p>
 </details>
 
-
 ### Observamos el nuevo deployment
+
+Accedemos a la <a href="http://ejercicio-ejercicio-practico.apps-crc.testing/" target="_blank">URL</a>
+y refrescamos el navegador
+
 <details><summary>show</summary>
 <p>
 

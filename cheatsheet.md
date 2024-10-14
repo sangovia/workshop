@@ -869,12 +869,12 @@ oc expose svc my-app-svc-node-port
 oc get routes
 ```
 
-<a href="http://my-app-svc-node-port-default.apps-crc.testing/" target="_blank">Link to web console</a>
+<a href="http://my-app-svc-node-port-default.apps-crc.testing/" target="_blank">Link a pagina NGINX</a>
 
 </p>
 
 Nos vamos a la consola y comprobamos los objetos creados:
 
-<a href="https://console-openshift-console.apps-crc.testing" target="_blank">Link to web console</a>
+<a href="https://console-openshift-console.apps-crc.testing" target="_blank">Link a consola WEB</a>
 
 

@@ -1,0 +1,11 @@
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+/.classpath
+/.project
+
+# OSX
+**/.DS_Store
+*.FDC

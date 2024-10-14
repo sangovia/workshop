@@ -873,3 +873,8 @@ oc get routes
 
 </p>
 
+Nos vamos a la consola y comprobamos los objetos creados:
+
+<a href="https://console-openshift-console.apps-crc.testing" target="_blank">Link to web console</a>
+
+

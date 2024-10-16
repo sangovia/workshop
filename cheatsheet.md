@@ -755,15 +755,13 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080
-      NodePort: 30080
+      nodePort: 30080
 ```
 
 ```bash
 oc apply -f manifest/node-port.yaml 
 ```
-```bash
-oc expose deployment my-app-deployment --name=my-app-svc-node-port --port=80 --target-port=80 --type=NodePort 
-```
+
 ```bash
 oc get services
 ```
@@ -787,11 +785,6 @@ oc get services
 ```bash
 oc get service my-app-deployment -o yaml
 ```
-```bash
-oc get service my-app-svc-loadbalancer -o yaml
-```
-
-
 </p>
 
 

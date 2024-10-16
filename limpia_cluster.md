@@ -31,6 +31,7 @@ oc delete configmap my-app-config
 oc delete configmap my-imp-app-config1
 oc delete configmap my-imp-app-config2
 oc delete route my-app-svc-node-port
+oc delete deployment ejercicio
 ```
 
 

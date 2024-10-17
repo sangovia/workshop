@@ -766,7 +766,7 @@ oc apply -f manifest/node-port.yaml
 oc get services
 ```
 ```bash
-oc get service my-app-svc-node-port -o yaml
+oc get service my-node-port-service -o yaml
 ```
 
 </p>
@@ -783,7 +783,7 @@ oc expose deployment my-app-deployment --name=my-app-svc-loadbalancer --port=80 
 oc get services
 ```
 ```bash
-oc get service my-app-deployment -o yaml
+oc get service my-app-svc-loadbalancer -o yaml
 ```
 </p>
 
@@ -856,7 +856,7 @@ oc project default
 ```
 
 ```bash
-oc expose svc my-app-svc-node-port
+oc expose svc my-node-port-service
 ```
 ```bash
 oc get routes
